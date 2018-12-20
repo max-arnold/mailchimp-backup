@@ -1,0 +1,16 @@
+# emacs
+*~
+.\#*
+\.\#.+
+
+# python
+__pycache__/
+*.py[cod]
+
+# diff/merge
+*.orig
+*.rej
+
+# mac
+.DS_Store
+
