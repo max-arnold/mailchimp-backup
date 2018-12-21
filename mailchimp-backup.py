@@ -19,25 +19,19 @@ def _client(key):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='MailChimp list backup script'
-    )
+    parser = argparse.ArgumentParser(description='MailChimp list backup script')
+    parser.add_argument('--key', type=str, help='API key')
     parser.add_argument(
-        '--key',
-        type=str,
-        help='API key'
+        '--show-lists', action='store_true', help='Show available lists'
     )
     options = parser.parse_args()
 
-    key = getattr(
-        options, 'key',
-        os.environ.get('MAILCHIMP_KEY')
-    )
+    key = getattr(options, 'key', os.environ.get('MAILCHIMP_KEY'))
     if key is None:
         parser.exit(
             status=1,
             message=(
                 'Please specify either the MAILCHIMP_KEY '
                 'environment variable or the --key argument\n'
-            )
+            ),
         )
