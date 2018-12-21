@@ -18,6 +18,22 @@ def _client(key):
     return MailChimp(mc_api=key)
 
 
+def get_lists(key):
+    """Return lists info."""
+    return _client(key).lists.all(get_all=True)
+
+
+def show_lists(key):
+    """Display lists info."""
+    lists = get_lists(key)
+    for lst in lists['lists']:
+        print(
+            'ID: {}, Name: "{}", Members: {}'.format(
+                lst['id'], lst['name'], lst['stats']['member_count']
+            )
+        )
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='MailChimp list backup script')
     parser.add_argument('--key', type=str, help='API key')
@@ -35,3 +51,6 @@ if __name__ == '__main__':
                 'environment variable or the --key argument\n'
             ),
         )
+
+    if options.show_lists:
+        show_lists(key)
