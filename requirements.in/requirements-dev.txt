@@ -1,0 +1,12 @@
+-r requirements.txt
+-r pip-tools.txt
+
+# ipython
+ipython
+ipdb
+
+# linters
+pylint
+pep8
+flake8
+black
