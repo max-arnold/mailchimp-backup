@@ -33,14 +33,16 @@ ID: 6677889900, Name: "Monsters Inc", Members: 456
 If that works well, then you can export any specific list into a CSV file:
 
 ```bash
-./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --list 1122334455 --out list-1122334455.csv
+./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --list 1122334455 --out 'list-{list}.csv'
 ```
 
 Or you can export all lists:
 
 ```bash
-./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --all --out-dir /mnt/backup
+./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --all --out '/mnt/backup/{year}-{month:02d}/list-{day:02d}-{list}.csv'
 ```
+
+Possible format variables: year, month, day, hour, minute, second, list.
 
 ## Things you may also want to do
 

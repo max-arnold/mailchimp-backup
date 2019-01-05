@@ -3,8 +3,10 @@
 
 import argparse
 import csv
+from datetime import datetime
 import io
 import os
+import sys
 
 import requests
 from mailchimp3 import MailChimp
@@ -18,6 +20,23 @@ def _client(key):
         '(https://github.com/max-arnold/mailchimp-backup)'
     )
     return MailChimp(mc_api=key)
+
+
+def _filename(out, lst):
+    """Generate a filename."""
+    _filename.now = _filename.now or datetime.now()
+    attrs = {
+        'year': _filename.now.year,
+        'month': _filename.now.month,
+        'day': _filename.now.day,
+        'hour': _filename.now.hour,
+        'minute': _filename.now.minute,
+        'second': _filename.now.second,
+        'list': lst,
+    }
+    return os.path.abspath(out.format(**attrs))
+
+_filename.now = None
 
 
 def get_lists(key):
@@ -94,7 +113,7 @@ def export_list(key, list_id):
 def export_all_lists(key, options):
     """Export all existing lists."""
     for lst in get_lists(key)['lists']:
-        yield export_list(key, lst['id'])
+        yield (lst['id'], export_list(key, lst['id']))
 
 
 if __name__ == '__main__':
@@ -105,6 +124,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('--list', type=str, help='List ID')
     parser.add_argument('--all-lists', action='store_true', help='List ID')
+    parser.add_argument('--out', type=str, help='Output file')
     options = parser.parse_args()
 
     key = getattr(options, 'key', os.environ.get('MAILCHIMP_KEY'))
@@ -122,9 +142,27 @@ if __name__ == '__main__':
         parser.exit()
 
     if options.list:
-        export_list(key, options.list)
+        lst = export_list(key, options.list)
+        if options.out:
+            filename = _filename(options.out, options.list)
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            with open(filename, 'wb') as fp:
+                fp.write(lst.encode('utf-8'))
+        else:
+            sys.stdout.write(lst)
         parser.exit()
 
     if options.all_lists:
-        export_all_lists(key, options)
+        current_filename = None
+        lists = list(export_all_lists(key, options))
+        for lst_id, lst in lists:
+            if options.out:
+                filename = _filename(options.out, lst_id)
+                os.makedirs(os.path.dirname(filename), exist_ok=True)
+                mode = 'wb' if current_filename != filename else 'ab'
+                with open(filename, mode) as fp:
+                    fp.write(lst.encode('utf-8'))
+                current_filename = filename
+            else:
+                sys.stdout.write(lst)
         parser.exit()
