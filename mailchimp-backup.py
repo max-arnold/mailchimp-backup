@@ -125,6 +125,7 @@ if __name__ == '__main__':
     parser.add_argument('--list', type=str, help='List ID')
     parser.add_argument('--all-lists', action='store_true', help='List ID')
     parser.add_argument('--out', type=str, help='Output file')
+    parser.add_argument('--fail-if-empty', action='store_true', help='Fail if there are no lists or any of them is empty')
     options = parser.parse_args()
 
     key = getattr(options, 'key', os.environ.get('MAILCHIMP_KEY'))
@@ -143,6 +144,11 @@ if __name__ == '__main__':
 
     if options.list:
         lst = export_list(key, options.list)
+        if options.fail_if_empty and len(lst.split('\n')) < 2:
+            parser.exit(
+                status=1,
+                message='List {} is empty'.format(options.list)
+            )
         if options.out:
             filename = _filename(options.out, options.list)
             os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -155,7 +161,17 @@ if __name__ == '__main__':
     if options.all_lists:
         current_filename = None
         lists = list(export_all_lists(key, options))
+        if options.fail_if_empty and len(lists) == 0:
+                parser.exit(
+                    status=1,
+                    message='No lists found'
+                )
         for lst_id, lst in lists:
+            if options.fail_if_empty and len(lst.split('\n')) < 2:
+                parser.exit(
+                    status=1,
+                    message='List {} is empty'.format(lst_id)
+                )
             if options.out:
                 filename = _filename(options.out, lst_id)
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
