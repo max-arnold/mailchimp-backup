@@ -128,7 +128,7 @@ if __name__ == '__main__':
     parser.add_argument('--fail-if-empty', action='store_true', help='Fail if there are no lists or any of them is empty')
     options = parser.parse_args()
 
-    key = getattr(options, 'key', os.environ.get('MAILCHIMP_KEY'))
+    key = options.key or os.environ.get('MAILCHIMP_KEY')
     if key is None:
         parser.exit(
             status=1,
