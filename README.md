@@ -53,6 +53,31 @@ Possible format variables: year, month, day, hour, minute, second, list.
 
 To do that, you can wrap the tool into a bash script and setup a daily/weekly cron job. Please make sure that you are able to receive email messages sent by the cron daemon, otherwise you will miss very important notifications.
 
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+export MAILCHIMP_KEY=11223344556677889900aabbccddeeff-us0
+export GNUPGHOME=~/mailchimp-backup/gpg
+BACKUP_DIR=~/mailchimp-backup/backup
+PYTHON_BIN=~/.virtualenvs/mailchimp-backup/bin/python3
+BACKUP_SCRIPT=~/mailchimp-backup/mailchimp-backup.py
+
+# Backup
+mkdir -p "${BACKUP_DIR}"
+$PYTHON_BIN $BACKUP_SCRIPT --all-lists --fail-if-empty --out \
+     "${BACKUP_DIR}/{year}-{month:02d}/list-{list}-{hour:02d}-{minute:02d}-{second:02d}.csv"
+
+# Compress and encrypt
+find "${BACKUP_DIR}/" -type f -name 'list-*.csv' -exec gzip \{\} \; \
+     -exec gpg --encrypt --recipient you@example.com --trust-model always \{\}.gz \; \
+     -exec rm -f \{\}.gz \;
+
+# Remove backups older than 90 days
+find "${BACKUP_DIR}/" -type f -name 'list-*.csv.gz.gpg' -mtime +90 -delete
+find "${BACKUP_DIR}/" -mindepth 1 -type d -empty -delete
+```
+
 ## Other tools
 
 * https://mailchimp.com/help/export-and-back-up-account-data/ - built-in manual export tool (you will need to do this at least once per week)
