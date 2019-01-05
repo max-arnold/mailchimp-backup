@@ -42,7 +42,7 @@ Or you can export all lists:
 ./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --all --out '/mnt/backup/{year}-{month:02d}/list-{day:02d}-{list}.csv'
 ```
 
-Possible format variables: year, month, day, hour, minute, second, list.
+Possible format variables: `year`, `month`, `day`, `hour`, `minute`, `second`, `list`.
 
 ## Things you may also want to do
 
