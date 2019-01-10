@@ -66,7 +66,7 @@ BACKUP_SCRIPT=~/mailchimp-backup/mailchimp-backup.py
 # Backup
 mkdir -p "${BACKUP_DIR}"
 $PYTHON_BIN $BACKUP_SCRIPT --all-lists --fail-if-empty --out \
-     "${BACKUP_DIR}/{year}-{month:02d}/list-{list}-{hour:02d}-{minute:02d}-{second:02d}.csv"
+     "${BACKUP_DIR}/{year}-{month:02d}/list-{list}-{day:02d}-{hour:02d}-{minute:02d}-{second:02d}.csv"
 
 # Compress and encrypt
 find "${BACKUP_DIR}/" -type f -name 'list-*.csv' -exec gzip \{\} \; \
