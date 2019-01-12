@@ -39,7 +39,7 @@ If that works well, then you can export any specific list into a CSV file:
 Or you can export all lists:
 
 ```bash
-./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --all --out '/mnt/backup/{year}-{month:02d}/list-{day:02d}-{list}.csv'
+./mailchimp-backup.py --key 11223344556677889900aabbccddeeff-us0 --all --out '/mnt/backup/{year}-{month}/list-{day}-{list}.csv'
 ```
 
 Possible format variables: `year`, `month`, `day`, `hour`, `minute`, `second`, `list`.
@@ -66,7 +66,7 @@ BACKUP_SCRIPT=~/mailchimp-backup/mailchimp-backup.py
 # Backup
 mkdir -p "${BACKUP_DIR}"
 $PYTHON_BIN $BACKUP_SCRIPT --all-lists --fail-if-empty --out \
-     "${BACKUP_DIR}/{year}-{month:02d}/list-{list}-{day:02d}-{hour:02d}-{minute:02d}-{second:02d}.csv"
+     "${BACKUP_DIR}/{year}-{month}/list-{list}-{day}-{hour}-{minute}-{second}.csv"
 
 # Compress and encrypt
 find "${BACKUP_DIR}/" -type f -name 'list-*.csv' -exec gzip \{\} \; \

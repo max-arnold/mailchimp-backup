@@ -26,12 +26,12 @@ def _filename(out, lst):
     """Generate a filename."""
     _filename.now = _filename.now or datetime.now()
     attrs = {
-        'year': _filename.now.year,
-        'month': _filename.now.month,
-        'day': _filename.now.day,
-        'hour': _filename.now.hour,
-        'minute': _filename.now.minute,
-        'second': _filename.now.second,
+        'year': '{:04d}'.format(_filename.now.year),
+        'month': '{:02d}'.format(_filename.now.month),
+        'day': '{:02d}'.format(_filename.now.day),
+        'hour': '{:02d}'.format(_filename.now.hour),
+        'minute': '{:02d}'.format(_filename.now.minute),
+        'second': '{:02d}'.format(_filename.now.second),
         'list': lst,
     }
     return os.path.abspath(out.format(**attrs))
