@@ -124,7 +124,7 @@ if __name__ == '__main__':
         '--show-lists', action='store_true', help='Show available lists'
     )
     parser.add_argument('--list', type=str, help='List ID')
-    parser.add_argument('--all-lists', action='store_true', help='List ID')
+    parser.add_argument('--all-lists', action='store_true', help='Export all list IDs')
     parser.add_argument('--out', type=str, help='Output file')
     parser.add_argument(
         '--fail-if-empty',
