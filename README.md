@@ -1,4 +1,4 @@
-# MailChimp list backup tool
+# MailChimp list backup/restore tool
 
 Apparently, MailChimp thinks it is completely fine to [delete your account with no warning or notification](https://blog.rongarret.info/2018/12/mailchimp-deleted-my-account-with-no.html). You can lose access to your account with no chance to backup your list, and the support won't help you. Moreover, if you go through all the comments on [the HN thread](https://news.ycombinator.com/item?id=18715866), you will find other people who had the same experience.
 
@@ -17,7 +17,7 @@ hash -r
 pip install -r requirements.txt
 ```
 
-## Usage
+## Backup script usage
 
 Go to your Mailchimp account and [create an API key](https://mailchimp.com/help/about-api-keys/#Find_or_Generate_Your_API_Key). Store your API key in the environment variable named `MAILCHIMP_KEY`. Alternatively, you can specify it on the command line, but this is less secure because the key will be visible in a process list.
 
@@ -44,10 +44,27 @@ Or you can export all lists:
 
 Possible format variables: `year`, `month`, `day`, `hour`, `minute`, `second`, `list`.
 
+## Restore script usage
+
+```bash
+./mailchimp-restore.py --key 11223344556677889900aabbccddeeff-us0 --show-lists
+
+ID: 1122334455, Name: "Acme Corporation", Members: 1
+ID: 6677889900, Name: "Monsters Inc", Members: 1
+```
+
+If that works well, then you can restore a previously exported CSV file into any specific list:
+
+```bash
+./mailchimp-restore.py --key 11223344556677889900aabbccddeeff-us0 --list 1122334455 --in 'list.csv'
+```
+
+Please note that a backup/restore cycle will lose some data (registration timestamps, stats, etc).
+
 ## Things you may also want to do
 
 1. Ensure that backups actually contain some data (i.e. not empty)
-2. Keep multiple backups (will help if you accidentally destroy your own mailing list)
+2. Keep previous backups (will help if you accidentally destroy your own mailing list)
 3. Compress and encrypt the backups
 4. Automate the whole process
 
@@ -81,4 +98,4 @@ find "${BACKUP_DIR}/" -mindepth 1 -type d -empty -delete
 ## Other tools
 
 * https://mailchimp.com/help/export-and-back-up-account-data/ - built-in manual export tool (you will need to do this at least once per week)
-* https://stompapp.xyz/ - was mentioned on HN the thread, but I never tried it
+* https://stompapp.xyz/ - was mentioned on the HN thread, but I never tried it
