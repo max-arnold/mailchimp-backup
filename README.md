@@ -6,6 +6,16 @@ Fortunately, the author of that post was lucky, and his account was reinstated w
 
 This has been on my to-do list for more than two years, and only after I read that blog post, I finally felt motivated enough to make a tool to automatically backup my personal mailing lists.
 
+## 2022 UPDATE
+
+The risk has been realized! Think twice if you still want to have business with Mailchimp/Intuit. They banned a whole country (Russia 🇷🇺) with no ability to save the hard-earned mailing lists.
+
+![Mailchimp country ban](mailchimp-country-ban.png)
+
+Now we (Russians) have a community-maintained black list of Russophobic vendors who engaged in similar practices and even stole prepaid funds: [#ВСЁЗАПОМНИМ](https://всезапомним.рф/).
+
+If your country has data locality laws, do your due diligence and check whether your software vendor is compliant. If it is compliant and will do something like Mailchimp did, you will be able to sue it using domestic customer protection laws and save your data.
+
 ## Installation
 
 ```bash
