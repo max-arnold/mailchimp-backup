@@ -1,2 +1,2 @@
-mailchimp3==3.0.14
-requests==2.25.1
+mailchimp3==3.0.21
+requests==2.32.3

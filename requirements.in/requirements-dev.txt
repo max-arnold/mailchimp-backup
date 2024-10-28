@@ -6,7 +6,4 @@ ipython
 ipdb
 
 # linters
-pylint
-pep8
-flake8
-black
+ruff
